@@ -5,12 +5,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using PotatoPlace.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PotatoService
+namespace PotatoPlace
 {
     public class Startup
     {
@@ -25,6 +26,7 @@ namespace PotatoService
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddTransient<IPotatoService, PotatoService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,8 +45,6 @@ namespace PotatoService
             {
                 endpoints.MapControllers();
             });
-
-
         }
     }
 }

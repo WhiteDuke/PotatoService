@@ -3,9 +3,8 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
-namespace PotatoService.Controllers
+namespace PotatoPlace.Controllers
 {
     [ApiController]
     [Route("[controller]")]
@@ -24,16 +23,14 @@ namespace PotatoService.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Potato> Get()
+        public IEnumerable<Potato> GetPotatoes()
         {
-            var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new Potato
             {
-                Code = "SRPV",
+                Code = $"P{index}",
                 CreateDate = DateTime.Now,
                 Name = Sorts[index]
-            })
-            .ToArray();
+            }).ToArray();
         }
     }
 }

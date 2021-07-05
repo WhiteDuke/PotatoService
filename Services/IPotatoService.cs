@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PotatoService.Services
+namespace PotatoPlace.Services
 {
     /// <summary>
     /// Интерфейс сервиса
@@ -14,6 +14,10 @@ namespace PotatoService.Services
 
         void Delete(int id);
 
-        void Refresh();
+        void Refresh(Potato p);
+
+        IEnumerable<Potato> GetList();
+
+        Potato GetPotato(int id);
     }
 }

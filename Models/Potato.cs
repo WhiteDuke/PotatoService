@@ -1,6 +1,6 @@
 using System;
 
-namespace PotatoService
+namespace PotatoPlace
 {
     public class Potato
     {
