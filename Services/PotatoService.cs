@@ -1,8 +1,5 @@
-﻿using Serilog;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace PotatoPlace.Services
 {
@@ -10,16 +7,38 @@ namespace PotatoPlace.Services
     {
         private Dictionary<int, Potato> _storage = new Dictionary<int, Potato>();
 
+        public PotatoService()
+        {
+            for (int i = 1; i <= 5; i++)
+            {
+                Potato p = new Potato
+                {
+                    Id = i,
+                    Code = $"P{i}",
+                    Name = Guid.NewGuid().ToString(),
+                    CreateDate = DateTime.Now,
+                    TypeId = i,
+                    TypeName = "simple"
+                };
+
+                p.UpdateDate = p.CreateDate;
+
+                Add(p);
+            }
+        }
+
         public void Add(Potato potato)
         {
             if (!_storage.ContainsKey(potato.Id))
                 _storage.Add(potato.Id, potato);
+            else throw new ArgumentException($"Попытка повторного добавления данных по ключу {potato.Id}");
         }
 
         public void Delete(int id)
         {
             if (_storage.ContainsKey(id))
                 _storage.Remove(id);
+            else throw new ArgumentOutOfRangeException($"Не найден экземпляр данных с идентификатором {id}");
         }
 
         public void Refresh(Potato p)

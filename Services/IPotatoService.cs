@@ -8,7 +8,7 @@ namespace PotatoPlace.Services
     /// <summary>
     /// Интерфейс сервиса
     /// </summary>
-    interface IPotatoService
+    public interface IPotatoService
     {
         void Add(Potato potato);
 
