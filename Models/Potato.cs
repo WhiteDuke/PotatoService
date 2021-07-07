@@ -10,12 +10,14 @@ namespace PotatoPlace
 
         public string Code { get; set; }
 
+        public DateTime CreateDate { get; set; }
+
+        public DateTime? UpdateDate { get; set; }
+
         public int TypeId { get; set; }
 
         public string TypeName { get; set; }
 
-        public DateTime CreateDate { get; set; }
-        
-        public DateTime? UpdateDate { get; set; }
+        public Models.Type Type { get; set; }
     }
 }

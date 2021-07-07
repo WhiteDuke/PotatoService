@@ -10,6 +10,13 @@ namespace PotatoPlace.Services
     {
         private readonly Dictionary<int, Potato> _storage = new Dictionary<int, Potato>();
 
+        private readonly Dictionary<int, string> _types = new Dictionary<int, string>
+        {
+            [0] = "simple",
+            [1] = "complicated",
+            [2] = "overhelmed"
+        };
+
         private readonly PotatoContext _context;
 
         public PotatoService(PotatoContext context = null)
@@ -24,8 +31,8 @@ namespace PotatoPlace.Services
                     Code = $"P{i}",
                     Name = Guid.NewGuid().ToString(),
                     CreateDate = DateTime.Now,
-                    TypeId = i,
-                    TypeName = "simple"
+                    TypeId = i % 2,
+                    TypeName = _types[i % 2]
                 };
 
                 Add(p);
