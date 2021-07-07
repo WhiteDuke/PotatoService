@@ -28,13 +28,21 @@ namespace PotatoPlace
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
         {
+            env.EnvironmentName = "Production";
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseExceptionHandler("/error");
+            }
+
+            app.UseStatusCodePages();
+            app.UseStatusCodePagesWithReExecute("/error", "?code={0}");
 
             app.UseRouting();
-
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
