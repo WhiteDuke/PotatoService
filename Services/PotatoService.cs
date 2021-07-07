@@ -31,8 +31,8 @@ namespace PotatoPlace.Services
                     Code = $"P{i}",
                     Name = Guid.NewGuid().ToString(),
                     CreateDate = DateTime.Now,
-                    TypeId = i % 2,
-                    TypeName = _types[i % 2]
+                    TypeId = i % _types.Count,
+                    TypeName = _types[i % _types.Count]
                 };
 
                 Add(p);
