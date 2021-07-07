@@ -40,15 +40,16 @@ namespace PotatoPlace.Controllers
         public Potato GetPotato(int id)
         {
             _logger.LogInformation($"::Запрошен экземпляр данных по идентификатору [{id}]::");
-            Potato p = _potatoService.GetPotato(id);
 
-            if (p != null)
-                return p;
-            else
+            try
             {
-                string msg = $"::Экземпляр данных с идентификатором [{id}] не обнаружен::";
-                _logger.LogWarning(msg);
-                throw new KeyNotFoundException(msg);
+                Potato p = _potatoService.GetPotato(id);
+                return p;
+            }
+            catch (KeyNotFoundException ex)
+            {
+                _logger.LogWarning(ex.Message);
+                throw;
             }
         }
 
@@ -73,7 +74,7 @@ namespace PotatoPlace.Controllers
         }
 
         [HttpPut("add")]
-        public void AddPotato(Potato p)
+        public void AddPotato([FromBody]Potato p)
         {
             _logger.LogInformation($"Попытка добавления экземпляра данных");
             if (p == null)
@@ -84,6 +85,24 @@ namespace PotatoPlace.Controllers
                 _potatoService.Add(p);
             }
             catch (ArgumentException ex)
+            {
+                _logger.LogError(ex.Message);
+                throw;
+            }
+        }
+
+        [HttpPut("update/{id}")]
+        public void UpdatePotato(int id, [FromBody]Potato p)
+        {
+            _logger.LogInformation($"Попытка обновления экземпляра данных с id={id}");
+            if (_potatoService.GetPotato(id) == null || p == null)
+                throw new NullReferenceException("Отсутствуют данные для обновления");
+
+            try
+            {
+                _potatoService.Update(id, p);
+            }
+            catch (KeyNotFoundException ex)
             {
                 _logger.LogError(ex.Message);
                 throw;

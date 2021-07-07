@@ -21,8 +21,6 @@ namespace PotatoPlace.Services
                     TypeName = "simple"
                 };
 
-                p.UpdateDate = p.CreateDate;
-
                 Add(p);
             }
         }
@@ -30,7 +28,10 @@ namespace PotatoPlace.Services
         public void Add(Potato potato)
         {
             if (!_storage.ContainsKey(potato.Id))
+            {
                 _storage.Add(potato.Id, potato);
+                _storage[potato.Id].CreateDate = DateTime.Now;
+            }
             else throw new ArgumentException($"Попытка повторного добавления данных по ключу {potato.Id}");
         }
 
@@ -41,12 +42,23 @@ namespace PotatoPlace.Services
             else throw new ArgumentOutOfRangeException($"Не найден экземпляр данных с идентификатором {id}");
         }
 
-        public void Refresh(Potato p)
+        public void Update(int id, Potato p)
         {
-            if (_storage.ContainsKey(p.Id))
+            if (_storage.ContainsKey(id))
             {
-                _storage[p.Id] = p;
+                if (!string.IsNullOrEmpty(p.Code))
+                    _storage[id].Code = p.Code;
+
+                if (!string.IsNullOrEmpty(p.Name))
+                    _storage[id].Name = p.Name;
+
+                if (!string.IsNullOrEmpty(p.TypeName))
+                    _storage[id].TypeName = p.TypeName;
+
+                _storage[id].UpdateDate = DateTime.Now;
             }
+            else
+                throw new KeyNotFoundException($"Отсутствуют данные по идентификатору {id}");
         }
 
         public IEnumerable<Potato> GetList()
@@ -60,7 +72,7 @@ namespace PotatoPlace.Services
             if (_storage.ContainsKey(id))
                 return _storage[id];
 
-            return null;
+            throw new KeyNotFoundException($"Отсутствуют данные по идентификатору {id}");
         }
     }
 }
