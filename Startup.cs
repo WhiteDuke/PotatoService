@@ -21,6 +21,8 @@ namespace PotatoPlace
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            //string connection = Configuration.GetConnectionString("localConnection");
+            //services.AddDbContext<PotatoContext>(options => options.UseSqlServer(connection));
             services.AddSingleton<IPotatoService, PotatoService>();
             services.AddSwaggerDocument();
         }

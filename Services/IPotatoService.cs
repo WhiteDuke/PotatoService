@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using PotatoPlace.Models;
+using System.Collections.Generic;
 
 namespace PotatoPlace.Services
 {
