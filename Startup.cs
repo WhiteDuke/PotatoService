@@ -23,9 +23,13 @@ namespace PotatoPlace
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            // Для проверки работы с локальным хранилищем - закомментировать 3 нижележащие строчки
             string connection = Configuration.GetConnectionString("localConnection");
             services.AddDbContext<PotatoContext>(options => options.UseSqlServer(connection));
             services.AddScoped<IPotatoService, PotatoService>();
+
+            // Для проверки работы с локальынм хранилищем - раскомментировать нижележащую строчку
             //services.AddSingleton<IPotatoService, PotatoService>();
             services.AddSwaggerDocument();
         }
