@@ -88,6 +88,10 @@ namespace PotatoPlace.Services
 
         private void AddToDb(Potato potato)
         {
+            potato.Id = 0;
+            if (potato.typeId == 0)
+                potato.typeId = null;
+
             _context.Potatoes.Add(potato);
             _context.SaveChanges();
         }

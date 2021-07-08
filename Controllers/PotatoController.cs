@@ -74,7 +74,7 @@ namespace PotatoPlace.Controllers
             }
         }
 
-        [HttpPut("add")]
+        [HttpPost("add")]
         public void AddPotato([FromBody]Potato p)
         {
             _logger.LogInformation($"Попытка добавления экземпляра данных");

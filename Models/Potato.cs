@@ -1,4 +1,6 @@
 using System;
+using System.ComponentModel;
+using System.Text.Json.Serialization;
 
 namespace PotatoPlace
 {
@@ -12,14 +14,19 @@ namespace PotatoPlace
 
         public string Code { get; set; }
 
+        [JsonIgnore]
         public DateTime CreateDate { get; set; }
 
+        [JsonIgnore]
         public DateTime? UpdateDate { get; set; }
 
+        [DefaultValue(null)]
         public int? typeId { get; set; }
 
+        [JsonIgnore]
         public string typeName { get; set; }
 
+        [JsonIgnore]
         public Models.Type Type { get; set; }
     }
 }
