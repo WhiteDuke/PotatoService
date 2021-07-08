@@ -34,8 +34,8 @@ namespace PotatoPlace.Services
                         Code = $"P{i}",
                         Name = Guid.NewGuid().ToString(),
                         CreateDate = DateTime.Now,
-                        typeId = i % _types.Count,
-                        typeName = _types[i % _types.Count]
+                        TypeId = i % _types.Count,
+                        TypeName = _types[i % _types.Count]
                     };
 
                     AddToStorage(p);
@@ -89,8 +89,8 @@ namespace PotatoPlace.Services
         private void AddToDb(Potato potato)
         {
             potato.Id = 0;
-            if (potato.typeId == 0)
-                potato.typeId = null;
+            if (potato.TypeId == 0)
+                potato.TypeId = null;
 
             _context.Potatoes.Add(potato);
             _context.SaveChanges();
@@ -136,8 +136,8 @@ namespace PotatoPlace.Services
                 if (!string.IsNullOrEmpty(p.Name))
                     _storage[id].Name = p.Name;
 
-                if (!string.IsNullOrEmpty(p.typeName))
-                    _storage[id].typeName = p.typeName;
+                if (!string.IsNullOrEmpty(p.TypeName))
+                    _storage[id].TypeName = p.TypeName;
 
                 _storage[id].UpdateDate = DateTime.Now;
             }
@@ -145,9 +145,9 @@ namespace PotatoPlace.Services
                 throw new KeyNotFoundException($"Отсутствуют данные по идентификатору {id}");
         }
 
-        private async void UpdateInDb(int id, Potato potato)
+        private void UpdateInDb(int id, Potato potato)
         {
-            Potato p = await _context.Potatoes.FirstOrDefaultAsync(x => x.Id == id);
+            Potato p =  _context.Potatoes.Find(id);
             if (p != null)
             {
                 if (!string.IsNullOrEmpty(potato.Code))
@@ -156,13 +156,10 @@ namespace PotatoPlace.Services
                 if (!string.IsNullOrEmpty(potato.Name))
                     p.Name = potato.Name;
 
-                if (!string.IsNullOrEmpty(potato.typeName))
-                    p.typeName = potato.typeName;
-
                 p.UpdateDate = DateTime.Now;
                 _context.Potatoes.Update(p);
 
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
             }
         }
 

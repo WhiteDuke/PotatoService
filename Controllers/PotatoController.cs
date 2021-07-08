@@ -92,7 +92,7 @@ namespace PotatoPlace.Controllers
             }
         }
 
-        [HttpPut("update/{id}")]
+        [HttpPost("update/{id}")]
         public void UpdatePotato(int id, [FromBody]Potato p)
         {
             _logger.LogInformation($"Попытка обновления экземпляра данных с id={id}");

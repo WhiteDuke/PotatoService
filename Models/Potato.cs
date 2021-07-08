@@ -21,10 +21,12 @@ namespace PotatoPlace
         public DateTime? UpdateDate { get; set; }
 
         [DefaultValue(null)]
-        public int? typeId { get; set; }
+        [JsonPropertyName("typeId")]
+        public int? TypeId { get; set; }
 
         [JsonIgnore]
-        public string typeName { get; set; }
+        [JsonPropertyName("typeName")]
+        public string TypeName { get; set; }
 
         [JsonIgnore]
         public Models.Type Type { get; set; }
