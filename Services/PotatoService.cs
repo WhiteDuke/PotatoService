@@ -8,6 +8,8 @@ namespace PotatoPlace.Services
 {
     public class PotatoService : IPotatoService
     {
+        private static int _index = 0;
+
         private readonly Dictionary<int, Potato> _storage = new Dictionary<int, Potato>();
 
         private readonly Dictionary<int, string> _types = new Dictionary<int, string>
@@ -23,19 +25,44 @@ namespace PotatoPlace.Services
         {
             _context = context;
 
-            for (int i = 1; i <= 5; i++)
+            if (_context == null)
             {
-                Potato p = new Potato
+                for (int i = 1; i <= 5; i++)
                 {
-                    Id = i,
-                    Code = $"P{i}",
-                    Name = Guid.NewGuid().ToString(),
-                    CreateDate = DateTime.Now,
-                    TypeId = i % _types.Count,
-                    TypeName = _types[i % _types.Count]
-                };
+                    Potato p = new Potato
+                    {
+                        Code = $"P{i}",
+                        Name = Guid.NewGuid().ToString(),
+                        CreateDate = DateTime.Now,
+                        typeId = i % _types.Count,
+                        typeName = _types[i % _types.Count]
+                    };
 
-                Add(p);
+                    AddToStorage(p);
+                }
+            }
+            else
+            {
+                _context.Types.AddRange(new Models.Type { Name = _types[0] }, new Models.Type { Name = _types[1] }, new Models.Type { Name = _types[2] });
+                _context.SaveChanges();
+
+                if (!_context.Potatoes.AnyAsync().Result)
+                {
+                    for (int i = 1; i <= 5; i++)
+                    {
+                        Potato p = new Potato
+                        {
+                            Code = $"P{i}",
+                            Name = Guid.NewGuid().ToString(),
+                            CreateDate = DateTime.Now,
+                        };
+
+                        p.Type = _context.Types.Find(i % _types.Count);
+                        _context.Potatoes.Add(p);
+                    }
+                }
+
+                _context.SaveChanges();
             }
         }
 
@@ -49,8 +76,10 @@ namespace PotatoPlace.Services
 
         private void AddToStorage(Potato potato)
         {
-            if (!_storage.ContainsKey(potato.Id))
+            if (potato.IsNew() || !_storage.ContainsKey(potato.Id))
             {
+                potato.Id = _index;
+                _index++;
                 _storage.Add(potato.Id, potato);
                 _storage[potato.Id].CreateDate = DateTime.Now;
             }
@@ -60,7 +89,7 @@ namespace PotatoPlace.Services
         private void AddToDb(Potato potato)
         {
             _context.Potatoes.Add(potato);
-            _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
 
         public void Delete(int id)
@@ -82,7 +111,7 @@ namespace PotatoPlace.Services
         {
             Potato potato = new Potato { Id = id };
             _context.Entry(potato).State = EntityState.Deleted;
-            _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
 
         public void Update(int id, Potato p)
@@ -103,8 +132,8 @@ namespace PotatoPlace.Services
                 if (!string.IsNullOrEmpty(p.Name))
                     _storage[id].Name = p.Name;
 
-                if (!string.IsNullOrEmpty(p.TypeName))
-                    _storage[id].TypeName = p.TypeName;
+                if (!string.IsNullOrEmpty(p.typeName))
+                    _storage[id].typeName = p.typeName;
 
                 _storage[id].UpdateDate = DateTime.Now;
             }
@@ -123,8 +152,8 @@ namespace PotatoPlace.Services
                 if (!string.IsNullOrEmpty(potato.Name))
                     p.Name = potato.Name;
 
-                if (!string.IsNullOrEmpty(potato.TypeName))
-                    p.TypeName = potato.TypeName;
+                if (!string.IsNullOrEmpty(potato.typeName))
+                    p.typeName = potato.typeName;
 
                 p.UpdateDate = DateTime.Now;
                 _context.Potatoes.Update(p);

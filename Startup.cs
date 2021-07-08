@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using PotatoPlace.Models;
 using PotatoPlace.Services;
 
 namespace PotatoPlace
@@ -21,9 +23,10 @@ namespace PotatoPlace
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            //string connection = Configuration.GetConnectionString("localConnection");
-            //services.AddDbContext<PotatoContext>(options => options.UseSqlServer(connection));
-            services.AddSingleton<IPotatoService, PotatoService>();
+            string connection = Configuration.GetConnectionString("localConnection");
+            services.AddDbContext<PotatoContext>(options => options.UseSqlServer(connection));
+            services.AddScoped<IPotatoService, PotatoService>();
+            //services.AddSingleton<IPotatoService, PotatoService>();
             services.AddSwaggerDocument();
         }
 

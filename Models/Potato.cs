@@ -4,6 +4,8 @@ namespace PotatoPlace
 {
     public class Potato
     {
+        public bool IsNew() => Id <= 0;
+
         public int Id { get; set; }
 
         public string Name { get; set; }
@@ -14,9 +16,9 @@ namespace PotatoPlace
 
         public DateTime? UpdateDate { get; set; }
 
-        public int TypeId { get; set; }
+        public int? typeId { get; set; }
 
-        public string TypeName { get; set; }
+        public string typeName { get; set; }
 
         public Models.Type Type { get; set; }
     }
